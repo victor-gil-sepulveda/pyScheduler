@@ -46,6 +46,7 @@ class SerialScheduler(object):
                 self.list_processes()
         
         self.ended()
+        return self.results
     
     def choose_runnable_task(self):
         for task_name in self.not_completed:
@@ -74,13 +75,17 @@ class SerialScheduler(object):
         self.finished.append(task_name)
     
     def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
-        if not task_name in self.tasks.keys():
+        task_names = [t.name for t in self.tasks]
+        if not task_name in task_names:
             task = SerialTask( name = task_name, description = description, function = target_function, kwargs=function_kwargs)
             task.description = description
             self.tasks.append(task)
             self.not_completed.append(task_name)
             self.dependencies[task_name] = dependencies
         else:
-            print "[Error SerialScheduler::add_task] Task %s already exists."%task_name
+            print "[Error SerialScheduler::add_task] Task %s already exists. Task name must be unique."%task_name
             exit()
+            
+    def ended(self):
+        pass
         

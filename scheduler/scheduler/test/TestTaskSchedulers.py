@@ -5,14 +5,18 @@ Created on 07/02/2013
 '''
 import unittest
 import time
+from scheduler.serialScheduler import SerialScheduler
 
 def test_without_params():
     time.sleep(1)
 
 def test_with_params(seconds):
     time.sleep(seconds)
-    
-def add_processes(scheduler):
+
+def echo(this):
+    return this
+
+def add_tasks(scheduler):
     """"
     Builds a dependency structure like this one:
     
@@ -21,13 +25,25 @@ def add_processes(scheduler):
       2  3      9
       | / \
       4 5 6
-    """"
+    """
+    scheduler.add_task(task_name = "1", dependencies = [], description ="",target_function = echo ,function_kwargs={"this":1})
+    scheduler.add_task(task_name = "2", dependencies = ["1"], description ="",target_function = echo ,function_kwargs={"this":2})
+    scheduler.add_task(task_name = "3", dependencies = ["1"], description ="",target_function = echo ,function_kwargs={"this":3})
+    scheduler.add_task(task_name = "4", dependencies = ["2"], description ="",target_function = echo ,function_kwargs={"this":4})
+    scheduler.add_task(task_name = "5", dependencies = ["3"], description ="",target_function = echo ,function_kwargs={"this":5})
+    scheduler.add_task(task_name = "6", dependencies = ["3"], description ="",target_function = echo ,function_kwargs={"this":6})
+    scheduler.add_task(task_name = "7", dependencies = [], description ="",target_function = echo ,function_kwargs={"this":7})
+    scheduler.add_task(task_name = "8", dependencies = [], description ="",target_function = echo ,function_kwargs={"this":8})
+    scheduler.add_task(task_name = "9", dependencies = ["8"], description ="",target_function = echo ,function_kwargs={"this":9})
     
-    scheduler.add_task(task_name = string(1), target_function, function_kwargs, description)
+    results = scheduler.run()
+    
     
 class TestTaskSchedulers(unittest.TestCase):
     
-    
+    def testSerialScheduling(self):
+        serial = SerialScheduler()
+        add_tasks(serial)
 #     def test_ProcessParallelScheduler(self):
 #          
 #         # Without dependencies!
