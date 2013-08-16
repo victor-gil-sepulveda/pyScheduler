@@ -21,7 +21,7 @@ class SerialScheduler(object):
         """
         dependencies {"task_name":["dep_task_A", "dep_task_B"]}
         """
-        self.tasks = []
+        self.tasks = {}
         self.dependencies = {}
         self.not_completed = []
         self.finished = []
@@ -42,15 +42,15 @@ class SerialScheduler(object):
                 # Run a process
                 self.run_task(task_name)
                 self.remove_task(task_name)
-                # List processes
-                self.list_processes()
+                # List tasks
+                #self.list_tasks()
         
         self.ended()
         return self.results
     
     def choose_runnable_task(self):
         for task_name in self.not_completed:
-            if not task_name in self.dependencies: # This process has no dependencies
+            if len(self.dependencies[task_name]) == 0: # This process has no dependencies
                 return task_name;
         return None # All task have dependencies (circular dependencies for instance)
     
@@ -75,11 +75,10 @@ class SerialScheduler(object):
         self.finished.append(task_name)
     
     def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
-        task_names = [t.name for t in self.tasks]
-        if not task_name in task_names:
+        if not task_name in self.tasks:
             task = SerialTask( name = task_name, description = description, function = target_function, kwargs=function_kwargs)
             task.description = description
-            self.tasks.append(task)
+            self.tasks[task_name] = task
             self.not_completed.append(task_name)
             self.dependencies[task_name] = dependencies
         else:
