@@ -73,12 +73,13 @@ class SerialScheduler(object):
         # Add it to the list of completed tasks
         self.finished.append(task_name)
     
-    def add_task(self, task_name, target_function, function_kwargs, description):
+    def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
         if not task_name in self.tasks.keys():
             task = SerialTask( name = task_name, description = description, function = target_function, kwargs=function_kwargs)
             task.description = description
             self.tasks.append(task)
             self.not_completed.append(task_name)
+            self.dependencies[task_name] = dependencies
         else:
             print "[Error SerialScheduler::add_task] Task %s already exists."%task_name
             exit()

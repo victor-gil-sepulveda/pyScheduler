@@ -23,7 +23,7 @@ def add_processes(scheduler):
       4 5 6
     """"
     
-    scheduler.add_task()
+    scheduler.add_task(task_name = string(1), target_function, function_kwargs, description)
     
 class TestTaskSchedulers(unittest.TestCase):
     
