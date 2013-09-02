@@ -47,6 +47,7 @@ class TestTaskSchedulers(unittest.TestCase):
     def testParallelScheduling(self):
         parallel = ProcessParallelScheduler(4)
         add_tasks(parallel)
+        print parallel.run()
 
 #     def test_ProcessParallelScheduler(self):
 #          

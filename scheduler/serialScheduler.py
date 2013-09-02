@@ -37,10 +37,10 @@ class SerialScheduler(object):
             
             if task_name is None:
                 print "It was impossible to pick a suitable task for running. Check dependencies."
-                break;
+                return []
             else:
                 # Run a process
-                self.run_task(task_name)
+                self.results.append(self.run_task(task_name))
                 self.remove_task(task_name)
                 # List tasks
                 #self.list_tasks()
@@ -57,7 +57,7 @@ class SerialScheduler(object):
     def run_task(self, task_name):
         """
         """
-        self.results.append(self.tasks[task_name].run())
+        return self.tasks[task_name].run()
     
     def remove_task(self, task_name):
         """
