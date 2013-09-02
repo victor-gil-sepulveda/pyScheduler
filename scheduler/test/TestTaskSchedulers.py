@@ -6,6 +6,7 @@ Created on 07/02/2013
 import unittest
 import time
 from scheduler.serialScheduler import SerialScheduler
+from scheduler.processParallelScheduler import ProcessParallelScheduler
 
 def test_without_params():
     time.sleep(1)
@@ -44,8 +45,9 @@ class TestTaskSchedulers(unittest.TestCase):
         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
         
     def testParallelScheduling(self):
-        parallel = ProcessParallelScheduler()
+        parallel = ProcessParallelScheduler(4)
         add_tasks(parallel)
+
 #     def test_ProcessParallelScheduler(self):
 #          
 #         # Without dependencies!
