@@ -43,7 +43,9 @@ class TestTaskSchedulers(unittest.TestCase):
         add_tasks(serial)
         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
         
-    
+    def testParallelScheduling(self):
+        parallel = ProcessParallelScheduler()
+        add_tasks(parallel)
 #     def test_ProcessParallelScheduler(self):
 #          
 #         # Without dependencies!

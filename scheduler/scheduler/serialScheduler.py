@@ -19,7 +19,7 @@ class SerialScheduler(object):
     
     def __init__(self):
         """
-        dependencies {"task_name":["dep_task_A", "dep_task_B"]}
+        dependencies {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run until task B and A are cleared.
         """
         self.tasks = {}
         self.dependencies = {}
