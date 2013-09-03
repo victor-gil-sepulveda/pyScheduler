@@ -23,11 +23,23 @@ class ProcessParallelScheduler(SerialScheduler):
         Tries to run all the tasks, checking for dependencies.
         """
         pool = multiprocessing.Pool(processes = self.max_processes)
-        ordered_tasks = self.get_ordered_tasks()
-        if ordered_tasks != []:
-            self.results = pool.map(run_task, ordered_tasks)
+        deferred_results = []
+        # Check that dependencies are OK
+        while len(self.not_completed) > 0:
+            #Choose an available process
+            task_name = self.choose_runnable_task()
+            
+            if task_name is not None:
+                # Run a process
+                deferred_results.append(pool.apply_async(run_task, (self.tasks[task_name],), callback = self.remove_task(task_name)))
+       
         pool.close()
         pool.join()
         self.ended()
+
+        for def_result in deferred_results:
+            def_result.wait()
+            self.results.append(def_result.get())
         return self.results
   
+        
