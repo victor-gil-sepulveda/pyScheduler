@@ -29,8 +29,19 @@ class SerialScheduler(object):
     
     def run(self):
         """
-        Tries to run all the tasks, checking for dependencies.
+        Tries to run all the tasksin a way that tasks are not executed before their dependencies are
+        cleared.
         """
+        ordered_tasks = self.get_ordered_tasks()
+        
+        for task in ordered_tasks:
+            self.results.append(task.run())
+        
+        self.ended()
+        return self.results
+    
+    def get_ordered_tasks(self):
+        ordered_tasks = []
         while len( self.not_completed) > 0:
             #Choose an available process
             task_name = self.choose_runnable_task()
@@ -40,13 +51,9 @@ class SerialScheduler(object):
                 return []
             else:
                 # Run a process
-                self.results.append(self.run_task(task_name))
+                ordered_tasks.append(self.tasks[task_name])
                 self.remove_task(task_name)
-                # List tasks
-                #self.list_tasks()
-        
-        self.ended()
-        return self.results
+        return ordered_tasks
     
     def choose_runnable_task(self):
         for task_name in self.not_completed:
@@ -54,10 +61,6 @@ class SerialScheduler(object):
                 return task_name;
         return None # All task have dependencies (circular dependencies for instance)
     
-    def run_task(self, task_name):
-        """
-        """
-        return self.tasks[task_name].run()
     
     def remove_task(self, task_name):
         """
