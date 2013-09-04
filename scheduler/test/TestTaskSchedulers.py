@@ -38,13 +38,16 @@ def add_tasks(scheduler, test_function):
     
 class TestTaskSchedulers(unittest.TestCase):
     
-    def testSerialScheduling(self):
-        serial = SerialScheduler()
-        add_tasks(serial, echo)
-        self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
+#     def testSerialScheduling(self):
+#         print "****"
+#         serial = SerialScheduler()
+#         add_tasks(serial, echo)
+#         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
         
     def testParallelScheduling(self):
         parallel = ProcessParallelScheduler(4)
+        print
+        print "****"
         add_tasks(parallel, sleep)
         results = parallel.run()
         print results

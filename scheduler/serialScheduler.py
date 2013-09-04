@@ -8,9 +8,11 @@ class SerialTask(object):
         self.function = function
         self.name = name
         self.kwargs = kwargs
+        self.result = None
     
     def run(self):
-        return self.function(**(self.kwargs))
+        self.result = self.function(**(self.kwargs))
+        return self.result
     
 class SerialScheduler(object):
     """
@@ -66,6 +68,8 @@ class SerialScheduler(object):
         """
         
         """
+        print "Removing",  task_name
+        
         # Remove it from all dependencies. At the end all dependencies lists must be empty.
         for tn in self.dependencies:
             if task_name in self.dependencies[tn]:
