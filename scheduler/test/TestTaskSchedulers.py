@@ -9,9 +9,7 @@ from scheduler.serialScheduler import SerialScheduler
 from scheduler.processParallelScheduler import ProcessParallelScheduler
 
 def sleep(this):
-    print this, "has been STARTED"
     time.sleep(this)
-    print this, "has ENDED"
     return this
 
 def echo(this):
@@ -39,19 +37,15 @@ def add_tasks(scheduler, test_function):
     
 class TestTaskSchedulers(unittest.TestCase):
     
-#     def testSerialScheduling(self):
-#         print "****"
-#         serial = SerialScheduler()
-#         add_tasks(serial, echo)
-#         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
-        
+    def testSerialScheduling(self):
+        serial = SerialScheduler()
+        add_tasks(serial, echo)
+        self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
+         
     def testParallelScheduling(self):
         parallel = ProcessParallelScheduler(4)
-        print
-        print "****"
         add_tasks(parallel, sleep)
         results = parallel.run()
-        print results
         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], results) 
 
 if __name__ == "__main__":
