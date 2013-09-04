@@ -12,7 +12,7 @@ def run_task(process_name, tasks, pipe_end, pipe_lock, results_queue):
             pipe_lock.acquire()
             message_type, value = pipe_end.recv()
             pipe_lock.release()
-            if message_type == "ENGAGE TASK":
+            if message_type == "EXECUTE":
                 results_queue.put(tasks[value].run())
                 #print "Sending task finished",value
                 pipe_end.send(("TASK FINISHED", value))
@@ -65,7 +65,7 @@ class ProcessParallelScheduler(SerialScheduler):
                 task_name = self.choose_runnable_task()
                 if task_name is not None:
                     # If we can still execute a task we do it (dependency-free task)
-                    pipe_start.send(("ENGAGE TASK",task_name)) # We send a global message, the first to get it will be the one to
+                    pipe_start.send(("EXECUTE",task_name)) # We send a global message, the first to get it will be the one to
                     # execute the task
                     self.lock_task(task_name) # from now on this task is not available for choosing
                     self.running.append(task_name)
@@ -105,5 +105,3 @@ class ProcessParallelScheduler(SerialScheduler):
         
         self.ended()
         return self.results
-  
-        
