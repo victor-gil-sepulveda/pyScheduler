@@ -9,8 +9,9 @@ from scheduler.serialScheduler import SerialScheduler
 from scheduler.processParallelScheduler import ProcessParallelScheduler
 
 def sleep(this):
-    print this, "is sleeping..."
+    print this, "has been STARTED"
     time.sleep(this)
+    print this, "has ENDED"
     return this
 
 def echo(this):

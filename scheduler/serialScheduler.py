@@ -54,7 +54,9 @@ class SerialScheduler(object):
             else:
                 # Run a process
                 ordered_tasks.append(self.tasks[task_name])
-                self.remove_task(task_name)
+                self.lock_task(task_name)
+                self.complete_task(task_name)
+                self.remove_from_dependencies(task_name)
         return ordered_tasks
     
     def choose_runnable_task(self):
@@ -64,22 +66,23 @@ class SerialScheduler(object):
         return None # All task have dependencies (circular dependencies for instance)
     
     
-    def remove_task(self, task_name):
+    def lock_task(self, task_name):
         """
         
         """
-        print "Removing",  task_name
-        
+        # Remove it from the not_completed list
+        self.not_completed.remove(task_name)
+    
+    def complete_task(self, task_name):
+        # Add it to the list of completed tasks
+        self.finished.append(task_name)
+    
+    def remove_from_dependencies(self, task_name):    
         # Remove it from all dependencies. At the end all dependencies lists must be empty.
         for tn in self.dependencies:
             if task_name in self.dependencies[tn]:
                 self.dependencies[tn].remove(task_name)
         
-        # Remove it from the not_completed list
-        self.not_completed.remove(task_name)
-        
-        # Add it to the list of completed tasks
-        self.finished.append(task_name)
     
     def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
         if not task_name in self.tasks:
