@@ -4,7 +4,7 @@ Created on 16/05/2012
 @author: victor
 '''
 import multiprocessing
-from scheduler.serialScheduler import SerialScheduler
+from pyscheduler.serialScheduler import SerialScheduler
 
 def run_task(process_name, tasks, pipe_end, pipe_lock, results_queue):
     try:

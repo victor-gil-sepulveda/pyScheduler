@@ -5,9 +5,9 @@ Created on 07/02/2013
 '''
 import unittest
 import time
-from scheduler.serialScheduler import SerialScheduler
-from scheduler.processParallelScheduler import ProcessParallelScheduler
-from scheduler.MPIParallelScheduler import MPIParallelScheduler
+from pyscheduler.serialScheduler import SerialScheduler
+from pyscheduler.processParallelScheduler import ProcessParallelScheduler
+from pyscheduler.MPIParallelScheduler import MPIParallelScheduler
 
 def sleep(this):
     print this, "is going to sleep"

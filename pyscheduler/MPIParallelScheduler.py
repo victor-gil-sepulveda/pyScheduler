@@ -4,7 +4,7 @@ Created on 16/05/2012
 @author: victor
 '''
 from mpi4py import MPI
-from scheduler.serialScheduler import SerialScheduler
+from pyscheduler.serialScheduler import SerialScheduler
 
 class MPIParallelScheduler(SerialScheduler):  
     

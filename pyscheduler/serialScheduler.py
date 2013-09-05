@@ -16,12 +16,12 @@ class SerialTask(object):
     
 class SerialScheduler(object):
     """
-    Not very efficient scheduler (it would be better to build a dependency tree).
+    Serial scheduler that iteratively builds the dependency tree. It ensures that any task is executed before its dependencies.
     """
     
     def __init__(self):
         """
-        dependencies {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run until task B and A are cleared.
+        
         """
         self.tasks = {}
         self.dependencies = {}
@@ -85,6 +85,10 @@ class SerialScheduler(object):
         
     
     def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
+        """
+        dependencies {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run until task B and A are cleared.
+        """
+        
         if not task_name in self.tasks:
             task = SerialTask( name = task_name, description = description, function = target_function, kwargs=function_kwargs)
             task.description = description
