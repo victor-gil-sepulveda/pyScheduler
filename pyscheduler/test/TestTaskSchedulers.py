@@ -7,7 +7,7 @@ import unittest
 import time
 from pyscheduler.serialScheduler import SerialScheduler
 from pyscheduler.processParallelScheduler import ProcessParallelScheduler
-from pyscheduler.MPIParallelScheduler import MPIParallelScheduler
+# from pyscheduler.MPIParallelScheduler import MPIParallelScheduler
 
 def sleep(this):
     print this, "is going to sleep"
@@ -45,17 +45,17 @@ class TestTaskSchedulers(unittest.TestCase):
 #         add_tasks(serial, echo)
 #         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], serial.run())
 #          
-#     def testParallelScheduling(self):
-#         parallel = ProcessParallelScheduler(4)
-#         add_tasks(parallel, sleep)
-#         results = parallel.run()
-#         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], results) 
-    
-    def testMPIParallelScheduling(self):
-        parallel = MPIParallelScheduler()
+    def testParallelScheduling(self):
+        parallel = ProcessParallelScheduler(4)
         add_tasks(parallel, sleep)
         results = parallel.run()
-        print results
+        self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], results) 
+    
+#     def testMPIParallelScheduling(self):
+#         parallel = MPIParallelScheduler()
+#         add_tasks(parallel, sleep)
+#         results = parallel.run()
+#         print results
 #         self.assertItemsEqual([4, 2, 5, 6, 3, 1, 7, 9, 8], results) 
 
 if __name__ == "__main__":
