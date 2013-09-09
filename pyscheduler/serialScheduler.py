@@ -11,6 +11,7 @@ class SerialTask(object):
         self.result = None
     
     def run(self):
+        print "Running"
         self.result = self.function(**(self.kwargs))
         return self.result
     

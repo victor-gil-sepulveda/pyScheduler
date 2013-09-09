@@ -1,4 +1,4 @@
-print "I am the 0th, so the controller"'''
+'''
 Created on 16/05/2012
 
 @author: victor
@@ -16,14 +16,14 @@ class MPIParallelScheduler(SerialScheduler):
         print self.number_of_processes, "processes"
         self.running = []
         
-    def run(self):
+    def run(self, share_results_with_all_processes = False):
         """
         Tries to run all the tasks, checking for dependencies.
         """
-        
-
         # Check that dependencies are OK
         
+        # Wait till all processes are available
+        self.comm.Barrier()
         # Execute all tasks
         # rank 0 is the controller
         
@@ -86,6 +86,10 @@ class MPIParallelScheduler(SerialScheduler):
                 self.comm.send(("FINISH",None), dest = i, tag=1)
         
         self.ended()
+        
+        if share_results_with_all_processes:
+            self.results = self.comm.bcast(self.results, root=0)
+            
         return self.results
           
         

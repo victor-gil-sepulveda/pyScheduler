@@ -64,7 +64,7 @@ class TaskRunner():
         self.busy = False
         self.pipe_start.send(("FINISH",None))
         printnflush("joining")
-        self.process.join(1)
+        self.process.join()
         if self.process.is_alive():
             self.process.terminate()
     
@@ -78,7 +78,7 @@ class ProcessParallelScheduler(SerialScheduler):
     
     def __init__(self, max_processes):
         SerialScheduler.__init__(self)
-        self.number_of_processes = max_processes -1
+        self.number_of_processes = max_processes - 1
         self.running = []
         
     def run(self):
@@ -125,6 +125,7 @@ class ProcessParallelScheduler(SerialScheduler):
                 # We start polling busy runners pipes to wait for a result
                 task_finished = False
                 while not task_finished:
+                    print "polling"
                     for task_runner in task_runners:
                         if task_runner.busy and task_runner.has_an_incomming_message():
                             message, value  = task_runner.get_message()
