@@ -9,7 +9,7 @@ from pyscheduler.serialScheduler import SerialScheduler
 class MPIParallelScheduler(SerialScheduler):
     
     def __init__(self, share_results_with_all_processes = False, functions = {}):
-        SerialScheduler.__init__(self)
+        SerialScheduler.__init__(self,functions)
         self.comm = MPI.COMM_WORLD
         self.rank = self.comm.Get_rank()
         self.share_results_with_all_processes = share_results_with_all_processes
