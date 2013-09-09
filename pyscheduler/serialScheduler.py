@@ -31,7 +31,7 @@ class SerialScheduler(object):
         """
         self.functions = functions
     
-    def function_exec(self, function_type):
+    def function_exec(self, function_type, task_name = None):
         """
         Tries to execute one of the predefined functions.
         
@@ -40,6 +40,8 @@ class SerialScheduler(object):
         
         """
         if function_type in self.functions:
+            if task_name is not None:
+                self.functions[function_type]['kwargs']['task_name'] = task_name
             self.functions[function_type]['function'](**(self.functions[function_type]['kwargs']))
     
     def run(self):
@@ -60,9 +62,9 @@ class SerialScheduler(object):
         ordered_tasks = self.get_ordered_tasks()
         
         for task in ordered_tasks:
-            self.function_exec('task_start')
+            self.function_exec('task_start', task.name)
             self.results.append(task.run())
-            self.function_exec('task_end')
+            self.function_exec('task_end', task.name)
             
         self.function_exec('scheduling_end')
         
@@ -130,7 +132,6 @@ class SerialScheduler(object):
             if task_name in self.dependencies[tn]:
                 self.dependencies[tn].remove(task_name)
         
-    
     def add_task(self, task_name, dependencies, target_function, function_kwargs, description):
         """
         Adds a task to the scheduler. The task will be executed along with the other tasks when the 'run' function is called.

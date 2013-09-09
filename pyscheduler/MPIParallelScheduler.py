@@ -53,6 +53,7 @@ class MPIParallelScheduler(SerialScheduler):
                     except:
                         pass
                     if available_process is not None:
+                        self.function_exec('task_start', task_name)
                         self.comm.send(("EXECUTE",task_name), dest = available_process, tag=1)
                         self.lock_task(task_name) # from now on this task is not available for choosing
                         self.running.append(task_name)
@@ -63,13 +64,14 @@ class MPIParallelScheduler(SerialScheduler):
                 if cannot_choose_a_task or len(self.running) == available_workers:
                     # Wait for a result
                     ended_task_name, result, sender_rank = self.comm.recv(source = MPI.ANY_SOURCE, tag = 2)
+                    self.function_exec('task_ended', ended_task_name)
                     self.results.append(result)
                     self.running.remove(ended_task_name)
                     self.complete_task(ended_task_name)
                     self.remove_from_dependencies(ended_task_name)
                     busy_processes[sender_rank] = False
             else:
-                # task executing
+                # Task executing.
                 # Wait for a task number to be executed
                 message, task_name = self.comm.recv(source = 0, tag = 1)
                 if message == "EXECUTE":
@@ -86,11 +88,12 @@ class MPIParallelScheduler(SerialScheduler):
             for i in range(1,self.number_of_processes):
                 self.comm.send(("FINISH",None), dest = i, tag=1)
         
-        self.ended()
-        
         if self.share_results_with_all_processes:
             self.results = self.comm.bcast(self.results, root=0)
             
+        self.function_exec('scheduling_end')
+
         return self.results
-          
+        
+        
         
