@@ -30,7 +30,14 @@ class SerialScheduler(object):
             'scheduling_end' -> Defines the action performed when the scheduler has finished to run all tasks.
         """
         self.functions = functions
-    
+        self.tasks = {}
+        # Example of dependencies dictionary: {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run 
+        # until task B and A are cleared.
+        self.dependencies = {}
+        self.not_completed = []
+        self.finished = []
+        self.results = []
+        
     def function_exec(self, function_type, task_name = None):
         """
         Tries to execute one of the predefined functions.
@@ -51,14 +58,6 @@ class SerialScheduler(object):
         
         @return: An array with the results of task calculations.
         """
-        self.tasks = {}
-        # Example of dependencies dictionary: {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run 
-        # until task B and A are cleared.
-        self.dependencies = {}
-        self.not_completed = []
-        self.finished = []
-        self.results = []
-        
         ordered_tasks = self.get_ordered_tasks()
         
         for task in ordered_tasks:

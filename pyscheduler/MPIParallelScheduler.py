@@ -6,9 +6,9 @@ Created on 16/05/2012
 from mpi4py import MPI
 from pyscheduler.serialScheduler import SerialScheduler
 
-class MPIParallelScheduler(SerialScheduler):  
+class MPIParallelScheduler(SerialScheduler):
     
-    def __init__(self, share_results_with_all_processes = False, end_function = None, end_function_kwargs = {}):
+    def __init__(self, share_results_with_all_processes = False, functions = {}):
         SerialScheduler.__init__(self)
         self.comm = MPI.COMM_WORLD
         self.rank = self.comm.Get_rank()
@@ -16,7 +16,8 @@ class MPIParallelScheduler(SerialScheduler):
         self.number_of_processes = self.comm.Get_size()
 #         print self.number_of_processes, "processes"
         self.running = []
-        
+    
+    
     def run(self):
         """
         Tries to run all the tasks, checking for dependencies.
