@@ -18,9 +18,9 @@ def run_task(process_name, tasks, pipe_end):
             message_type, value = pipe_end.recv()
                 
             if message_type == "EXECUTE":
-                print "Running task",value
+#                 print "Running task",value
                 result = tasks[value].run()
-                print "Sending task finished",value
+#                 print "Sending task finished",value
                 pipe_end.send(("TASK FINISHED", (value, result)))
                 
             elif message_type == "FINISH":
@@ -39,7 +39,7 @@ def run_task(process_name, tasks, pipe_end):
     pipe_end.close()
     printnflush( "Task reached end")
 
-class TaskRunner():
+class TaskRunner(object):
     
     def __init__(self, process_name, target_function, tasks):
         self.pipe_start, self.pipe_end =  multiprocessing.Pipe()
@@ -53,7 +53,7 @@ class TaskRunner():
         self.process.start()
     
     def execute_task(self, task_name):
-        print "Executing task", task_name
+#         print "Executing task", task_name
         self.busy = True
         self.pipe_start.send(("EXECUTE",task_name))
     
@@ -63,7 +63,7 @@ class TaskRunner():
     def finalize(self):
         self.busy = False
         self.pipe_start.send(("FINISH",None))
-        printnflush("joining")
+#         printnflush("joining")
         self.process.join()
         if self.process.is_alive():
             self.process.terminate()
@@ -76,7 +76,7 @@ class TaskRunner():
 
 class ProcessParallelScheduler(SerialScheduler):
     
-    def __init__(self, max_processes):
+    def __init__(self, max_processes, end_function = None, end_function_kwargs = {}):
         SerialScheduler.__init__(self)
         self.number_of_processes = max_processes - 1
         self.running = []
@@ -85,9 +85,6 @@ class ProcessParallelScheduler(SerialScheduler):
         """
         Tries to run all the tasks, checking for dependencies.
         """
-        print "EXECUTING %d TASKS"%(len(self.tasks))
-        print len(self.not_completed)
-
         # Check that dependencies are OK
         
         # Create processes
@@ -125,7 +122,6 @@ class ProcessParallelScheduler(SerialScheduler):
                 # We start polling busy runners pipes to wait for a result
                 task_finished = False
                 while not task_finished:
-                    print "polling"
                     for task_runner in task_runners:
                         if task_runner.busy and task_runner.has_an_incomming_message():
                             message, value  = task_runner.get_message()

@@ -8,13 +8,13 @@ from pyscheduler.serialScheduler import SerialScheduler
 
 class MPIParallelScheduler(SerialScheduler):  
     
-    def __init__(self, share_results_with_all_processes = False):
+    def __init__(self, share_results_with_all_processes = False, end_function = None, end_function_kwargs = {}):
         SerialScheduler.__init__(self)
         self.comm = MPI.COMM_WORLD
         self.rank = self.comm.Get_rank()
         self.share_results_with_all_processes = share_results_with_all_processes
         self.number_of_processes = self.comm.Get_size()
-        print self.number_of_processes, "processes"
+#         print self.number_of_processes, "processes"
         self.running = []
         
     def run(self):
@@ -30,12 +30,12 @@ class MPIParallelScheduler(SerialScheduler):
         
         busy_processes = [False]*(self.number_of_processes)
         busy_processes[0] = True
-        if self.rank == 0:
-            # controller
-            print "I am the 0th, so the controller"
-        else:
-            # task executing
-            print "I am a slave", self.rank
+#         if self.rank == 0:
+#             # controller
+#             print "I am the 0th, so the controller"
+#         else:
+#             # task executing
+#             print "I am a slave", self.rank
         
         available_workers = self.number_of_processes - 1
         while not len(self.finished) == len(self.tasks):
@@ -80,7 +80,7 @@ class MPIParallelScheduler(SerialScheduler):
                 elif message == "FINISH":
                     break # exit the loop
         
-        print self.rank, "reached main loop end"
+#         print self.rank, "reached main loop end"
 
         if self.rank == 0:
             for i in range(1,self.number_of_processes):
