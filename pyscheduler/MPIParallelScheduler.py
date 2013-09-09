@@ -8,15 +8,16 @@ from pyscheduler.serialScheduler import SerialScheduler
 
 class MPIParallelScheduler(SerialScheduler):  
     
-    def __init__(self):
+    def __init__(self, share_results_with_all_processes = False):
         SerialScheduler.__init__(self)
         self.comm = MPI.COMM_WORLD
         self.rank = self.comm.Get_rank()
+        self.share_results_with_all_processes = share_results_with_all_processes
         self.number_of_processes = self.comm.Get_size()
         print self.number_of_processes, "processes"
         self.running = []
         
-    def run(self, share_results_with_all_processes = False):
+    def run(self):
         """
         Tries to run all the tasks, checking for dependencies.
         """
@@ -87,7 +88,7 @@ class MPIParallelScheduler(SerialScheduler):
         
         self.ended()
         
-        if share_results_with_all_processes:
+        if self.share_results_with_all_processes:
             self.results = self.comm.bcast(self.results, root=0)
             
         return self.results
