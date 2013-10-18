@@ -25,9 +25,9 @@ class SerialScheduler(object):
         
         @param fucntions: A dictionary containing 3 possible keys. Each key defines another dictionary of two 
         entries ('function' and 'kwargs') with a callable and its arguments. The possible keys are:
-            'task_start' -> Were an action performed after each task is called is defined.
-            'task_end' -> Defines the action performed when a task is finished.
-            'scheduling_end' -> Defines the action performed when the scheduler has finished to run all tasks.
+            'task_started' -> Were an action performed after each task is called is defined.
+            'task_ended' -> Defines the action performed when a task is finished.
+            'scheduling_ended' -> Defines the action performed when the scheduler has finished to run all tasks.
         """
         self.functions = functions
         self.tasks = {}
@@ -47,8 +47,7 @@ class SerialScheduler(object):
         
         """
         if function_type in self.functions:
-            if task_name is not None:
-                self.functions[function_type]['kwargs']['task_name'] = task_name
+            self.functions[function_type]['kwargs']['task_name'] = task_name
             self.functions[function_type]['function'](**(self.functions[function_type]['kwargs']))
     
     def run(self):
@@ -61,11 +60,11 @@ class SerialScheduler(object):
         ordered_tasks = self.get_ordered_tasks()
         
         for task in ordered_tasks:
-            self.function_exec('task_start', task.name)
+            self.function_exec('task_started', task.name)
             self.results.append(task.run())
-            self.function_exec('task_end', task.name)
+            self.function_exec('task_ended', task.name)
             
-        self.function_exec('scheduling_end')
+        self.function_exec('scheduling_ended')
         
         return self.results
     

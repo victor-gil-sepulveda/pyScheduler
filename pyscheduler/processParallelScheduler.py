@@ -108,7 +108,7 @@ class ProcessParallelScheduler(SerialScheduler):
                 # If we can still execute a task we find a free task runner to do it
                 for task_runner in task_runners:
                     if not task_runner.busy:
-                        self.function_exec('task_start', task_name)
+                        self.function_exec('task_started', task_name)
                         task_runner.execute_task(task_name)
                         self.lock_task(task_name)
                         self.running.append(task_name)
@@ -128,7 +128,7 @@ class ProcessParallelScheduler(SerialScheduler):
                             message, value  = task_runner.get_message()
                             if message == "TASK FINISHED":
                                 task_name, result = value
-                                self.function_exec('task_end', task_name)
+                                self.function_exec('task_ended', task_name)
                                 self.running.remove(task_name)
                                 self.complete_task(task_name)
                                 self.remove_from_dependencies(task_name)
@@ -144,6 +144,6 @@ class ProcessParallelScheduler(SerialScheduler):
         for task_runner in task_runners:
             task_runner.finalize()
         
-        self.function_exec('scheduling_end')
+        self.function_exec('scheduling_ended')
         
         return self.results

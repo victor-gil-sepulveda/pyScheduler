@@ -54,7 +54,7 @@ class MPIParallelScheduler(SerialScheduler):
                     except:
                         pass
                     if available_process is not None:
-                        self.function_exec('task_start', task_name)
+                        self.function_exec('task_started', task_name)
                         self.comm.send(("EXECUTE",task_name), dest = available_process, tag=1)
                         self.lock_task(task_name) # from now on this task is not available for choosing
                         self.running.append(task_name)
@@ -92,7 +92,7 @@ class MPIParallelScheduler(SerialScheduler):
         if self.share_results_with_all_processes:
             self.results = self.comm.bcast(self.results, root=0)
             
-        self.function_exec('scheduling_end')
+        self.function_exec('scheduling_ended')
 
         return self.results
         
