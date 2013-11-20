@@ -22,6 +22,7 @@ class MPIParallelScheduler(SerialScheduler):
         """
         Tries to run all the tasks, checking for dependencies.
         """
+        self.function_exec('scheduling_starts', {"number_of_tasks":len(self.not_completed)})
         # Check that dependencies are OK
         
         # Wait till all processes are available
@@ -54,7 +55,7 @@ class MPIParallelScheduler(SerialScheduler):
                     except:
                         pass
                     if available_process is not None:
-                        self.function_exec('task_started', task_name)
+                        self.function_exec('task_started', {"task_name":task.name})
                         self.comm.send(("EXECUTE",task_name), dest = available_process, tag=1)
                         self.lock_task(task_name) # from now on this task is not available for choosing
                         self.running.append(task_name)
@@ -65,7 +66,7 @@ class MPIParallelScheduler(SerialScheduler):
                 if cannot_choose_a_task or len(self.running) == available_workers:
                     # Wait for a result
                     ended_task_name, result, sender_rank = self.comm.recv(source = MPI.ANY_SOURCE, tag = 2)
-                    self.function_exec('task_ended', ended_task_name)
+                    self.function_exec('task_ended', {"task_name":ended_task_name})
                     self.results.append(result)
                     self.running.remove(ended_task_name)
                     self.complete_task(ended_task_name)

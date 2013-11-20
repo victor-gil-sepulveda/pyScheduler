@@ -27,6 +27,7 @@ class SerialScheduler(object):
         entries ('function' and 'kwargs') with a callable and its arguments. The possible keys are:
             'task_started' -> Were an action performed after each task is called is defined.
             'task_ended' -> Defines the action performed when a task is finished.
+            'scheduling_started' -> Defines the action performed when the scheduler starts to run tasks.
             'scheduling_ended' -> Defines the action performed when the scheduler has finished to run all tasks.
         """
         self.functions = functions
@@ -38,7 +39,7 @@ class SerialScheduler(object):
         self.finished = []
         self.results = []
         
-    def function_exec(self, function_type, task_name = None):
+    def function_exec(self, function_type, info = None):
         """
         Tries to execute one of the predefined functions.
         
@@ -47,7 +48,7 @@ class SerialScheduler(object):
         
         """
         if function_type in self.functions:
-            self.functions[function_type]['kwargs']['task_name'] = task_name
+            self.functions[function_type]['kwargs']['info'] = info
             self.functions[function_type]['function'](**(self.functions[function_type]['kwargs']))
     
     def run(self):
@@ -57,12 +58,14 @@ class SerialScheduler(object):
         
         @return: An array with the results of task calculations.
         """
+        self.function_exec('scheduling_starts', {"number_of_tasks":len(self.not_completed)})
+        
         ordered_tasks = self.get_ordered_tasks()
         
         for task in ordered_tasks:
-            self.function_exec('task_started', task.name)
+            self.function_exec('task_started', {"task_name":task.name})
             self.results.append(task.run())
-            self.function_exec('task_ended', task.name)
+            self.function_exec('task_ended', {"task_name":task.name})
             
         self.function_exec('scheduling_ended')
         
