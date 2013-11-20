@@ -85,7 +85,7 @@ class ProcessParallelScheduler(SerialScheduler):
         """
         Tries to run all the tasks, checking for dependencies.
         """
-        self.function_exec('scheduling_starts', {"number_of_tasks":len(self.not_completed)})
+        self.function_exec('scheduling_started', {"number_of_tasks":len(self.not_completed)})
         # Check that dependencies are OK
         
         # Create processes
@@ -129,7 +129,7 @@ class ProcessParallelScheduler(SerialScheduler):
                             message, value  = task_runner.get_message()
                             if message == "TASK FINISHED":
                                 task_name, result = value
-                                self.function_exec('task_ended', {"task_name":task_name})
+                                self.function_exec('task_ended', {"task_name":task_name, "finished":len(self.finished)})
                                 self.running.remove(task_name)
                                 self.complete_task(task_name)
                                 self.remove_from_dependencies(task_name)

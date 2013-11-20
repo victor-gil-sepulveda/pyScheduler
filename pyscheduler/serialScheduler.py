@@ -58,14 +58,14 @@ class SerialScheduler(object):
         
         @return: An array with the results of task calculations.
         """
-        self.function_exec('scheduling_starts', {"number_of_tasks":len(self.not_completed)})
+        self.function_exec('scheduling_started', {"number_of_tasks":len(self.not_completed)})
         
         ordered_tasks = self.get_ordered_tasks()
         
         for task in ordered_tasks:
             self.function_exec('task_started', {"task_name":task.name})
             self.results.append(task.run())
-            self.function_exec('task_ended', {"task_name":task.name})
+            self.function_exec('task_ended', {"task_name":task.name, "finished":len(self.finished)})
             
         self.function_exec('scheduling_ended')
         
