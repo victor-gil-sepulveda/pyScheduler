@@ -14,5 +14,4 @@ setup(name='pyScheduling',
       packages=[
                 'pyscheduler'
                 ]
-      
-     )
+)

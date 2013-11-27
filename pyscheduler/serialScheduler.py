@@ -30,7 +30,10 @@ class Task(object):
 
 class SerialScheduler(object):
     """
-    Serial scheduler that iteratively builds the dependency tree. It ensures that any task is executed before its dependencies.
+    Base scheduling class. It ensures that no task is executed before its dependencies (without building a
+    dependency tree).
+    It allows to define some functions that will be executed when the scheduler reaches some strategic points.
+    TODO: In all scheduler types a dependencies must be checked to avoid cycles for instance.
     """
 
     def __init__(self, functions = {}):
@@ -46,8 +49,6 @@ class SerialScheduler(object):
         """
         self.functions = functions
         self.tasks = {}
-        # Example of dependencies dictionary: {"task_C":["dep_task_A", "dep_task_B"]}, this means task C cannot be run
-        # until task B and A are cleared.
         self.dependencies = {}
         self.not_completed = []
         self.finished = []
@@ -55,7 +56,7 @@ class SerialScheduler(object):
 
     def function_exec(self, function_type, info = None):
         """
-        Tries to execute one of the predefined functions.
+        Execute one of the predefined functions if defined.
 
         @param function_type: Type of the function to check and run (proper types should be 'task_start','task_end'
         and 'scheduling_end', each defining 'function' and 'kwargs' entries.
@@ -67,7 +68,7 @@ class SerialScheduler(object):
 
     def run(self):
         """
-        Tries to run all the tasks in a way that tasks are not executed before their dependencies are
+        Runs all the tasks in a way that tasks are not executed before their dependencies are
         cleared.
 
         @return: An array with the results of task calculations.
@@ -153,6 +154,9 @@ class SerialScheduler(object):
 
         @param task_name:
         @param dependencies: A list with the task_names of the tasks that must be fulfilled before executing this other task.
+        Example of dependencies dictionary:
+            {"task_C":["dep_task_A", "dep_task_B"]}
+            This dependencies dict. means that task C cannot be run until task B and A are cleared.
         @param target_function: The function executed by this task.
         @param function_kwargs: Its arguments.
         @param description: A brief description of the task.
