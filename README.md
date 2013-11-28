@@ -7,7 +7,7 @@ pyScheduler is very simple pure Python implementation of a task scheduler.
 A task scheduler is a controller that executes tasks in a given order. In this case tasks are executed so that all
 tasks are executed before any of its dependencies.
 
-## Why may  I use a scheduler?
+## Why may I use a scheduler?
 Ok, at this point you might be thinking what's the point on building such a contraption if you only want to execute
 some tasks. Just put them on list, sort them so that no task is executed before its dependencies, and go ahead! Well,
 this is indeed the idea behind a serial scheduler. It does not look very useful indeed...
