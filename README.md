@@ -3,6 +3,17 @@ pyScheduler
 
 pyScheduler is very simple pure Python implementation of a task scheduler.
 
+## Installation
+To install it use (with root privileges):
+```
+pip install pyscheduler
+```
+Or download the last git version and use (with root privileges):
+
+```
+python setup.py install
+```
+
 ## What is a scheduler?
 A task scheduler is a controller that executes tasks in a given order. In this case tasks are executed so that all
 tasks are executed before any of its dependencies.
