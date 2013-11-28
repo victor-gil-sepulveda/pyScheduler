@@ -7,7 +7,7 @@ pyScheduler is very simple pure Python implementation of a task scheduler.
 A task scheduler is a controller that executes tasks in a given order. In this case tasks are executed so that all
 tasks are executed before any of its dependencies.
 
-## Why using a scheduler?
+## Why may  I use a scheduler?
 Ok, at this point you might be thinking what's the point on building such a contraption if you only want to execute
 some tasks. Just put them on list, sort them so that no task is executed before its dependencies, and go ahead! Well,
 this is indeed the idea behind a serial scheduler. It does not look very useful indeed...
@@ -31,7 +31,7 @@ Imagine we want to execute 10 tasks which dependency graph is represented in the
 <img src='images/TaskDependencies.png' style = "margin-left: auto; margin-right: auto;"></img>
 
 First step would be to create a scheduler and define the tasks:
-```
+```python
 scheduler = SerialScheduler()
 scheduler.add_task(task_name = "1", dependencies = ["2","3"], description ="",target_function = test_function ,function_kwargs={"this":1})
 scheduler.add_task(task_name = "2", dependencies = ["4"], description ="",target_function = test_function ,function_kwargs={"this":2})
@@ -49,7 +49,7 @@ the arguments we want to pass to this callable when is executed. Finally, the me
 contains the ids of the taks the task we are defining depends on.
 
 The last step would be just to run the scheduler:
-```
+```python
 scheduler.run()
 ```
 Taks will run in this order (7,9 and 8 could be run before the others though):
@@ -83,3 +83,7 @@ Things yet to do include a mechanism to allow tasks to work with the results of 
 and some sort of checker to warn about (and avoid) the definition of dependency cycles. Adding a little more logic to ( and
 refactoring) the 'next task selector' to improve load balance (see the example above for an example of how selection
 of the tasks can affect balance).
+So:
+- [ ] Cyclic dependency checks
+- [ ] Task result sharing machinery
+- [ ] Smarter load balancing
