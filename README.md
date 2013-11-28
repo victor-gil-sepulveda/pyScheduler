@@ -30,7 +30,7 @@ of the number of processes in the constructor).
 Imagine we want to execute 10 tasks which dependency graph is represented in the drawing below:
 <img src='images/TaskDependencies.png' style = "margin-left: auto; margin-right: auto;"></img>
 
-First step would be to create an scheduler and define the tasks:
+First step would be to create a scheduler and define the tasks:
 ```
 scheduler = SerialScheduler()
 scheduler.add_task(task_name = "1", dependencies = ["2","3"], description ="",target_function = test_function ,function_kwargs={"this":1})
