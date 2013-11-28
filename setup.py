@@ -6,7 +6,7 @@ Created on 25/02/2013
 from distutils.core import setup
 
 setup(
-    name='pyScheduling',
+    name='pyScheduler',
     version='0.1.0',
     description='Compendium of 3 different task schedulers with dependency managing.',
     author='Victor Alejandro Gil Sepulveda',
@@ -17,5 +17,5 @@ setup(
               'pyscheduler.test'
     ],
     license = 'LICENSE.txt',
-    long_description = open('README.md').read()
+    long_description = open('README.rst').read()
 )
