@@ -27,8 +27,8 @@ script using *mpirun* (-np number_of_processes) or it will not work (Process-bas
 of the number of processes in the constructor).
 
 ## Very simple example (from the test package)
-Imagine we want to execute 10 tasks which dependencies between themselves are like this:
-<img src='images/TaskDependencies.png'></img>
+Imagine we want to execute 10 tasks which dependency graph is represented in the drawing below:
+<img src='images/TaskDependencies.png' style = "margin-left: auto; margin-right: auto;"></img>
 
 First step would be to create an scheduler and define the tasks:
 ```
@@ -53,14 +53,15 @@ The last step would be just to run the scheduler:
 scheduler.run()
 ```
 Taks will run in this order (7,9 and 8 could be run before the others though):
-    4 -> 2 -> 5 -> 6 -> 3 -> 1 -> 7 -> 9 -> 8
-
+```
+4 -> 2 -> 5 -> 6 -> 3 -> 1 -> 7 -> 9 -> 8
+```
 If you want to parallelize the execution of your tasks, just change the first line by something like:
 ```
 parallel = ProcessParallelScheduler(4)
 ```
-And your computer will use 4 processes to complete the job (as one is used as a control node, only 3 processes will 
-contribute to the work).  
+And your computer will use 4 processes to complete the job (as one is used as a control node, only 3 processes will
+contribute to the work).
 
 ## Where is the documentation?
 Modules are profusely documented. Give the code a chance!
