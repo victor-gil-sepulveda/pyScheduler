@@ -61,11 +61,25 @@ If you want to parallelize the execution of your tasks, just change the first li
 parallel = ProcessParallelScheduler(4)
 ```
 And your computer will use 4 processes to complete the job (as one is used as a control node, only 3 processes will
-contribute to the work).
+contribute to the work). In this case this is one of the possible run traces you can get:
+```
+4 -> 2 -> 8 -> 9
+5 -> 3
+6 -> 7
+```
+Or even:
+```
+4 -> 2 -> 7
+5 -> 3 -> 9
+6 -> 8
+```
+which is better balanced.
 
 ## Where is the documentation?
 Modules are profusely documented. Give the code a chance!
 
 ## Next moves
 Things yet to do include a mechanism to allow tasks to work with the results of their direct or indirect dependencies
-and some sort of checker to warn about (and avoid) the definition of dependency cycles.
+and some sort of checker to warn about (and avoid) the definition of dependency cycles. Adding a little more logic to ( and
+refactoring) the 'next task selector' to improve load balance (see the example above for an example of how selection
+of the tasks can affect balance).
