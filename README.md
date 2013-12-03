@@ -14,6 +14,9 @@ Or download the last git version and use (with root privileges):
 python setup.py install
 ```
 
+Yo may want to also install [mpi4py](http://mpi4py.scipy.org/) to run MPI parallel tasks. It has not been set as a
+setup dependency as users may want to only perform Process-based scheduling.
+
 ## What is a scheduler?
 A task scheduler is a controller that executes tasks in a given order. In this case tasks are executed so that all
 tasks are executed before any of its dependencies.
